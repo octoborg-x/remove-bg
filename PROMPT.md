@@ -6,13 +6,7 @@ comparison page, before remove.bg's standalone site closes on
 1 Dec 2026. Sprint: 14 days (Day 1 = date of first LOG.md entry).
 
 EACH RUN
-1. Read LOG.md and /tmp/feedback.json (owner decisions on past PRs:
-   merged = approved; closed unmerged or comments = declined, follow
-   the stated reason).
-2. Do ONE small, concrete task: the next unfinished item in PLAN.
-3. Append a short entry to LOG.md: date, what you did, next task,
-   open questions.
-4. Stop. No long-running processes.
+Per-run procedure: follow agent/run.md exactly.
 
 PLAN
 D1-2: proposals/001-plan.md: ranked plan; choose the in-browser
