@@ -1,0 +1,37 @@
+name: autopay
+on:
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: autopay
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Git identity and bot push access
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+        run: |
+          git config user.name "autopay-bot"
+          git config user.email "autopay-bot@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${BOT_TOKEN}@github.com/${{ github.repository }}.git"
+      - name: Install OpenHands
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          "$HOME/.local/bin/uv" tool install openhands --python 3.12
+      - name: Run agent
+        env:
+          GH_TOKEN: ${{ secrets.BOT_TOKEN }}
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+          OPENHANDS_SUPPRESS_BANNER: "1"
+        run: openhands --headless --override-with-envs -f agent/run.md
